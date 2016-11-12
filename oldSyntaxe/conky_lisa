@@ -1,0 +1,102 @@
+# temps pour fermer conky en secondes. 0 = toujours actif 
+total_run_times 0
+
+# affiche le texte sur la sortie standard
+out_to_console no
+
+# réglage de la mémoire, pour éviter le clignotement
+double_buffer yes
+# Soustraire les mémoires tampons de la mémoire utilisée
+no_buffers yes
+text_buffer_size 2048
+
+# taux de rafraichissement de la fenêtre (en secondes)
+update_interval 1
+
+# nombre d'échantillons à utiliser pour calculer la moyenne d'utilisation
+cpu_avg_samples 4
+net_avg_samples 2
+
+# taille et positon
+alignment top_left
+minimum_size 350 20
+maximum_width 350
+
+# écart avec le bord x=gauche ou droit y= haut ou bas
+gap_x 380
+gap_y 600
+
+#  afficher les ombres
+draw_shades yes
+# afficher des contours
+draw_outline no
+# contours autour des blocs de texte
+draw_borders no
+# largeur du contour
+border_width 1
+# largeur des marges
+border_margin 4
+
+#pour que conky tourne en arrière plan background no pour les tests
+background yes
+
+# utiliser sa propre fenêtre
+own_window yes
+#type de fenêtre : normal(avec le cadre) / override / desktop
+own_window_type normal # normal / override / desktop
+#pseudo transparence si vous avez des icones sous le conky elle ne seront plus accessibles une fois Conky activé
+own_window_transparent yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
+own_window_argb_visual yes
+own_window_argb_value 0
+
+# Utiliser Xft (polices lissées etc)
+use_xft yes
+xftalpha .1
+override_utf8_locale yes # force UTF8
+
+#police a utiliser : use_xft doit être a "yes"
+# xftfont Fixed:size=8#OCR A Std:size=6
+xftfont monospace-8
+# Tout le texte en majuscule
+uppercase no
+
+# Ajoute des espaces après certains objets pour éviter de les faire bouger.
+# Fonctionne uniquement avec les polices Fixes
+use_spacer left
+
+#add space for percents value
+pad_percents 2
+
+# Couleurs
+default_color FFFFFF #blanc
+default_outline_color black
+
+color1 ff5e5e
+color2 e8e8e8
+color3 Tan1
+
+TEXT
+#machine
+${color3}SYSTEM LISA ${hr 1}
+${color1}OS TYPE : ${color2}${execi 3600 ./server_info.sh -s lisa osVersion osType | tr "\n" " "}
+${color1}OS NAME : ${color2}${execi 3600 ./server_info.sh -s lisa osName}
+${color1}Kernel  : ${color2}${execi 3600 ./server_info.sh -s lisa kernel architecture | tr "\n" " "}
+${color1}Uptime  : ${color2}${execi 3600 ./server_info.sh -s lisa upTime}
+${color1}Hostname: ${color2}${execi 3600 ./server_info.sh -s lisa hostName}
+${color1}Load Av.: ${color2}${execi 3600 ./server_info.sh -s lisa loadAverage}
+${color3}NETWORK ${hr 1}
+${color1}Internal IP : ${color2}${execi 3600 ./server_info.sh -s lisa internalIp}
+${color1}External IP : ${color2}${execi 3600 ./server_info.sh -s lisa externalIp}
+${color1}Name Servers: ${color2}${execi 3600 ./server_info.sh -s lisa nameServers}
+${color3}LOGGED USERS ${hr 1}
+${color2}${execi 3600 ./server_info.sh -s lisa loggedInUsers}
+${color3}MEMORY ${hr 1}
+${color1}RAM ${alignr}${color2} ${execi 3600 ./server_info.sh -s lisa ram} 
+${execibar 3600 ./server_info.sh -s lisa ramPercent}
+${color1}SWAP ${alignr}${color2} ${execi 3600 ./server_info.sh -s lisa swap}
+${execibar 3600 ./server_info.sh -s lisa swapPercent}
+${color3}HDD ${hr 1}
+${color2}${execi 3600 ./server_info.sh -s lisa disks}
+

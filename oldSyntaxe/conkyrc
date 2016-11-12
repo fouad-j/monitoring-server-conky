@@ -1,0 +1,148 @@
+# temps pour fermer conky en secondes. 0 = toujours actif 
+total_run_times 0
+
+# affiche le texte sur la sortie standard
+out_to_console no
+
+# réglage de la mémoire, pour éviter le clignotement
+double_buffer yes
+# Soustraire les mémoires tampons de la mémoire utilisée
+no_buffers yes
+text_buffer_size 2048
+
+# taux de rafraichissement de la fenêtre (en secondes)
+update_interval 1
+
+# nombre d'échantillons à utiliser pour calculer la moyenne d'utilisation
+cpu_avg_samples 4
+net_avg_samples 2
+
+# taille et positon
+alignment top_left
+minimum_size 350 20
+maximum_width 350
+
+# écart avec le bord x=gauche ou droit y= haut ou bas
+gap_x 15
+gap_y 20
+
+#  afficher les ombres
+draw_shades yes
+# afficher des contours
+draw_outline no
+# contours autour des blocs de texte
+draw_borders no
+# largeur du contour
+border_width 1
+# largeur des marges
+border_margin 4
+
+#pour que conky tourne en arrière plan background no pour les tests
+background yes
+
+# utiliser sa propre fenêtre
+own_window yes
+#type de fenêtre : normal(avec le cadre) / override / desktop
+own_window_type normal # normal / override / desktop
+#pseudo transparence si vous avez des icones sous le conky elle ne seront plus accessibles une fois Conky activé
+own_window_transparent yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
+own_window_argb_visual yes
+own_window_argb_value 0
+
+# Utiliser Xft (polices lissées etc)
+use_xft yes
+xftalpha .1
+override_utf8_locale yes # force UTF8
+
+#police a utiliser : use_xft doit être a "yes"
+# xftfont Fixed:size=8#OCR A Std:size=6
+xftfont monospace-8
+# Tout le texte en majuscule
+uppercase no
+
+# Ajoute des espaces après certains objets pour éviter de les faire bouger.
+# Fonctionne uniquement avec les polices Fixes
+use_spacer left
+
+#add space for percents value
+pad_percents 2
+
+# Couleurs
+default_color FFFFFF #blanc
+default_shade_color 333333
+default_outline_color black
+
+color1 EFF0FF
+color2 A2B5BF
+
+color5 E1E6FA
+color6 C4D7ED
+color7 ABC8E2
+color8 375D81
+color9 5F8CA3  #183152
+
+TEXT
+#ordinateur
+${color3}Ordinateur ${hr 1}
+${color1} ${execi 86400 lsb_release -si} : ${color2} ${execi 86400 lsb_release -sr} ${execi 86400 lsb_release -sc}
+${color1} $sysname  : ${color2} $kernel $machine $freq_g GHz
+${color1} Uptime : ${color2} $uptime
+
+#CPU
+${color3}CPU ${hr 1}
+${cpugraph 5e7b7b d8deeb}
+${voffset -24}${alignc}${cpu cpu1}%
+
+#memoire/swap
+${color3}Memory / Swap ${hr 1}
+${color2}RAM     : ${color1}$memperc% $mem/$memmax $membar
+${color2}Swap    : ${color1}${swapperc}% $swap/$swapmax $swapbar
+${color2}Process : ${color1}$processes ${color2}Running : ${color1}$running_processes
+
+#température
+${color3}Temperatures ${hr 1}
+${color2}CPU: ${color1}${hwmon 0 temp 1}C°  ${color2}M/B: ${color1}${hwmon 0 temp 2}C° ${color2}Local: ${color1}sda ${hddtemp /dev/sda}°
+
+#disque dur
+${color3}File systems ${hr 1}
+#disk1
+${color2}/     : ${color1}${fs_used_perc /}% ${fs_free /} ${fs_bar 7 /}
+${color2}/home : ${color1}${fs_used_perc /home/}% ${fs_free /home/} ${fs_bar 7 /home}
+${color2}data  : ${color1}${fs_used_perc /media/fouad/myData}% ${fs_free /media/fouad/myData} ${fs_bar 7 /media/fouad/myData}
+#${if_mounted /point/de/montage/}Intitulé : ${fs_used_perc /point/de/montage/}% ${fs_free /point/de/montage/} ${fs_bar 5,120 /point/de/montage/}${endif}
+
+#reseau
+${color3}Networking ${hr 1}
+${color9}Eth0 ${hr 1}
+${color2}Down ${color1}${offset 90}${totaldown enp2s0} ${offset 8}${color2}Up ${color1}${alignr}${totalup enp2s0}
+${downspeedgraph enp2s0 22,175 5e7b7b d8deeb} ${upspeedgraph enp2s0 22,170 99c8e8 618094}
+${offset 40}${voffset -21}${downspeedf enp2s0}k/s
+${offset 190}${voffset -14}${upspeedf enp2s0}k/s
+
+${color9}Wlan0 ${hr 1}
+${color2}Down ${color1}${offset 90}${totaldown wlp3s0} ${offset 8}${color2}Up ${color1}${alignr}${totalup wlp3s0}
+${downspeedgraph wlp3s0 22,175 5e7b7b d8deeb} ${upspeedgraph wlp3s0 22,170 99c8e8 618094}
+${offset 40}${voffset -21}${downspeedf wlp3s0}k/s
+${offset 190}${voffset -14}${upspeedf wlp3s0}k/s
+
+${color2}IP Public : ${color1}${texeci 3600 wget http://checkip.dyndns.org -O - -o /dev/null | cut -d : -f 2 | cut -d \< -f 1}
+${color2}Ip Local(eth0) : ${color1}${addr enp2s0} ${color2}|${color1} ${totaldown enp2s0} ${color2}|${color1} ${totalup enp2s0}
+${color2}Ip Local(wlan0): ${color1}${addr wlp3s0} ${color2}|${color1} ${totaldown wlp3s0} ${color2}|${color1} ${totalup wlp3s0}
+
+#processeur
+${color3}Process ${hr 2}
+Name   ${alignr}PID       CPU      RAM
+${color5} ${top name 1} ${alignr}${top pid 1} ${top cpu 1} ${top mem 1}
+${color6} ${top name 2} ${alignr}${top pid 2} ${top cpu 2} ${top mem 2}
+${color7} ${top name 3} ${alignr}${top pid 3} ${top cpu 3} ${top mem 3}
+${color9} ${top name 4} ${alignr}${top pid 4} ${top cpu 4} ${top mem 4}
+${color8} ${top name 5} ${alignr}${top pid 5} ${top cpu 5} ${top mem 5}
+
+${color3}Mem usage
+${color5} ${top_mem name 1} ${alignr} ${top_mem pid 1} ${top_mem cpu 1} ${top_mem mem 1}
+${color6} ${top_mem name 2} ${alignr} ${top_mem pid 2} ${top_mem cpu 2} ${top_mem mem 2}
+${color7} ${top_mem name 3} ${alignr} ${top_mem pid 3} ${top_mem cpu 3} ${top_mem mem 3}
+${color8} ${top_mem name 4} ${alignr} ${top_mem pid 4} ${top_mem cpu 4} ${top_mem mem 4}
+${color9} ${top_mem name 5} ${alignr} ${top_mem pid 5} ${top_mem cpu 5} ${top_mem mem 5}

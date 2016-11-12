@@ -1,0 +1,57 @@
+conky.config = {
+	total_run_times 			= 0,
+	out_to_console  			= false,
+	double_buffer   			= true,
+	no_buffers 					= true,
+	text_buffer_size 			= 2048,
+	update_interval 			= 1,
+	cpu_avg_samples 			= 4,
+	net_avg_samples 			= 2,
+	alignment 					= "top_left",
+	maximum_width 				= 350,
+	gap_x 						= 500,
+	draw_shades 				= true,
+	draw_outline 				= false,
+	draw_borders 				= false,
+	border_width 				= 1,
+	border_outer_margin 		= 4,
+	own_window 					= true,
+	own_window_transparent 		= true,
+	own_window_hints 			= "undecorated,below,sticky,skip_taskbar,skip_pager",
+	own_window_argb_visual 		= true,
+	own_window_argb_value 		= 0,
+	use_xft 					= true,
+	xftalpha 					= .1,
+	override_utf8_locale 		= true,
+	font 						= "Monospace:size=9",
+	uppercase 					= false,
+	use_spacer 					= "left",
+	pad_percents 				= 2,
+	default_color 				= "FFFFFF",
+	default_outline_color 		= "black",
+	color1 						= "78af78",
+	color2 						= "e8e8e8",
+	color3 						= "Tan1"
+}
+conky.text = [[
+${color3}SERVER: PI CI ${hr 1}
+${color1}OS TYPE : ${color2}${execi 3600 ~/Conky/server_info.sh -s pi osVersion osType | tr "\n" " "}
+${color1}OS NAME : ${color2}${execi 3600 ~/Conky/server_info.sh -s pi osName}
+${color1}Kernel  : ${color2}${execi 3600 ~/Conky/server_info.sh -s pi kernel architecture | tr "\n" " "}
+${color1}Uptime  : ${color2}${execi 3600 ~/Conky/server_info.sh -s pi upTime}
+${color1}Hostname: ${color2}${execi 3600 ~/Conky/server_info.sh -s pi hostName}
+${color1}Load Av.: ${color2}${execi 3600 ~/Conky/server_info.sh -s pi loadAverage}
+${color3}NETWORK ${hr 1}
+${color1}Internal IP : ${color2}${execi 3600 ~/Conky/server_info.sh -s pi internalIp}
+${color1}External IP : ${color2}${execi 3600 ~/Conky/server_info.sh -s pi externalIp}
+${color1}Name Servers: ${color2}${execi 3600 ~/Conky/server_info.sh -s pi nameServers}
+${color3}LOGGED USERS ${hr 1}
+${color2}${execi 3600 ~/Conky/server_info.sh -s pi loggedInUsers}
+${color3}MEMORY ${hr 1}
+${color1}RAM ${alignr}${color2} ${execi 3600 ~/Conky/server_info.sh -s pi ram} 
+${execibar 3600 ~/Conky/server_info.sh -s pi ramPercent}
+${color1}SWAP ${alignr}${color2} ${execi 3600 ~/Conky/server_info.sh -s pi swap}
+${execibar 3600 ~/Conky/server_info.sh -s pi swapPercent}
+${color3}HDD ${hr 1}
+${color2}${execi 3600 ~/Conky/server_info.sh -s pi disks}
+]]
