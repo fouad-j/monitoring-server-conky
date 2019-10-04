@@ -63,9 +63,15 @@ if [ $# == '0' ] ; then
 fi
 
 function fetchInfoServer {
-	pathConky="$(dirname ${0})";
+	pathConky="$( cd "$(dirname "$0")" ; pwd -P )"
+	
+	# create a log directory
+	if [ ! -d "$pathConky/log" ]; then
+		mkdir -p $pathConky/log
+	fi
 	
 	# get latest file for this server
+
 	fileName=$(ls -1At ${pathConky}/log/${1}-* 2> /dev/null | head -1);
 
 	# check if no file exist for this server in log folder or if it has over than refreshRate

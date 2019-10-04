@@ -3,6 +3,7 @@ A small script and config to monitor remotely your servers using conky
 # How it works
 * You need to set up SSH Keys to identify your machine without involving password
 * You need to change servers array in server_info.sh file lines 18 and 38
+* You need to change the default ssh port in server_info.sh file line 84 from 2122 to 22(default port for ssh)
 * Customize your conky config based on one of mine (conky_*)
 * Execute it with
 ```
